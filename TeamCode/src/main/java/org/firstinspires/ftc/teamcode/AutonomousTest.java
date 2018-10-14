@@ -57,19 +57,19 @@ import com.qualcomm.robotcore.util.Range;
 //@Disabled
 public class AutonomousTest extends LinearOpMode {
     Robot robot = new Robot();
+
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         robot.init(hardwareMap);
         // run until the end of the match (driver presses STOP)
-        
+
         robot.leftFrontDrive.setPower(0);
         robot.rightFrontDrive.setPower(0);
         robot.leftBackDrive.setPower(0);
         robot.rightBackDrive.setPower(0);
         while (opModeIsActive()) {
-
         }
     }
 }
