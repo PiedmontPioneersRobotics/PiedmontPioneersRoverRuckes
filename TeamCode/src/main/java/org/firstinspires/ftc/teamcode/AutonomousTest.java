@@ -65,11 +65,40 @@ public class AutonomousTest extends LinearOpMode {
         robot.init(hardwareMap);
         // run until the end of the match (driver presses STOP)
 
+
+
+        robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        telemetry.addData("Path0",  "Starting at %7d :%7d",
+                robot.leftFrontDrive.getCurrentPosition(),
+                robot.rightFrontDrive.getCurrentPosition(),
+                robot.leftBackDrive.getCurrentPosition(),
+                robot.rightBackDrive.getCurrentPosition());
+        telemetry.update();
+
+        waitForStart();
+
         robot.leftFrontDrive.setPower(0);
         robot.rightFrontDrive.setPower(0);
         robot.leftBackDrive.setPower(0);
         robot.rightBackDrive.setPower(0);
-        while (opModeIsActive()) {
+        while (opModeIsActive() && !(robot.leftFrontDrive.getCurrentPosition() >= 2800)) {
+            robot.leftFrontDrive.setPower(0.5);
+            robot.rightFrontDrive.setPower(0.5);
+            robot.leftBackDrive.setPower(0.5);
+            robot.rightBackDrive.setPower(0.5);
         }
+        robot.leftFrontDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
+        robot.leftBackDrive.setPower(0);
+        robot.rightBackDrive.setPower(0);
     }
 }
