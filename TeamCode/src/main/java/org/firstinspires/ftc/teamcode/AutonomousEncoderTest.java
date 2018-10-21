@@ -30,14 +30,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 
 /**
@@ -53,9 +47,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AutonomousTest", group="Linear Opmode")
+@Autonomous(name="AutonomousEncoderTest", group="Linear Opmode")
 //@Disabled
-public class AutonomousTest extends LinearOpMode {
+public class AutonomousEncoderTest extends LinearOpMode {
     Robot robot = new Robot();
 
     @Override
@@ -64,7 +58,6 @@ public class AutonomousTest extends LinearOpMode {
         telemetry.update();
         robot.init(hardwareMap);
         // run until the end of the match (driver presses STOP)
-
 
 
         robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -77,7 +70,7 @@ public class AutonomousTest extends LinearOpMode {
         robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        telemetry.addData("Path0",  "Starting at %7d :%7d",
+        telemetry.addData("Path0", "Starting at %7d :%7d",
                 robot.leftFrontDrive.getCurrentPosition(),
                 robot.rightFrontDrive.getCurrentPosition(),
                 robot.leftBackDrive.getCurrentPosition(),
@@ -85,20 +78,17 @@ public class AutonomousTest extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-
-        robot.leftFrontDrive.setPower(0);
-        robot.rightFrontDrive.setPower(0);
-        robot.leftBackDrive.setPower(0);
-        robot.rightBackDrive.setPower(0);
-        while (opModeIsActive() && !(robot.leftFrontDrive.getCurrentPosition() >= 288   )) {
-            robot.leftFrontDrive.setPower(0.25);
-            robot.rightFrontDrive.setPower(0.25);
-            robot.leftBackDrive.setPower(0.25);
-            robot.rightBackDrive.setPower(0.25);
+        robot.leftFrontDrive.setTargetPosition(200);
+        robot.leftBackDrive.setTargetPosition(200);
+        robot.rightFrontDrive.setTargetPosition(200);
+        robot.rightBackDrive.setTargetPosition(200);
+        while (robot.leftFrontDrive.isBusy() && opModeIsActive()) {
+            //Loop body can be empty
         }
         robot.leftFrontDrive.setPower(0);
-        robot.rightFrontDrive.setPower(0);
         robot.leftBackDrive.setPower(0);
+        robot.rightFrontDrive.setPower(0);
         robot.rightBackDrive.setPower(0);
+
     }
 }
