@@ -60,6 +60,7 @@ public class AutonomousEncoderTest extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
 
 
+        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -68,7 +69,6 @@ public class AutonomousEncoderTest extends LinearOpMode {
         robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("Path0", "Starting at %7d :%7d",
                 robot.leftFrontDrive.getCurrentPosition(),

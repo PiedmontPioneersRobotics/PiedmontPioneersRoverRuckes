@@ -88,5 +88,9 @@ public class Robot
         leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
     }
+
+    public void driveForward(double speed, double distance){
+        double encoderDistance = distance/0.00859029243;
+    }
  }
 
