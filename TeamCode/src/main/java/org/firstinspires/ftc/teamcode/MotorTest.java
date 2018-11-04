@@ -93,7 +93,7 @@ public class MotorTest extends OpMode
         telemetry.addData("Encoder Position", "ghj");
         power = gamepad1.left_stick_y;
         motor.setPower(power);
-        // Show the elapsed game time and wheel power.
+        // Show the elapsed game time and whe  el power.
 //        telemetry.addData("Status", "Run Time: " + runtime.toString());
 //        telemetry.addData("Motor" , power);
 //        telemetry.addData("gamepad" , gamepad1.left_stick_y);
