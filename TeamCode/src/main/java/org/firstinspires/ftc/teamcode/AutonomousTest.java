@@ -99,7 +99,11 @@ public class AutonomousTest extends LinearOpMode {
         }
 
     }
-   public void findGold (){
+
+    /**
+     * Finds and knocks gold piece.
+     */
+    public void findGold (){
         int posn = robot.findGoldPosition();
 
         if (posn == 0) {

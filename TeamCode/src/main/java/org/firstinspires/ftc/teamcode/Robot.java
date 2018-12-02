@@ -278,5 +278,13 @@ public class Robot {
      */
     public double getSteer(double error, double PCoeff) {
         return Range.clip(error * PCoeff, -1, 1);
+
+
+    }
+
+    public int findGoldPosition () {
+        int posn = -1;
+
+        return posn;
     }
 }
