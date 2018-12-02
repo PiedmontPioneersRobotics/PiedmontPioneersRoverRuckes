@@ -97,7 +97,7 @@ public class MecanumDrive extends OpMode
         robot.init(hardwareMap);
         // Setup a variable for each drive wheel to save power level for telemetry
         double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
+        double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4; //this could make it slow
         double rightX = gamepad1.right_stick_x;
         final double v1 = r * Math.cos(robotAngle) + rightX;
         final double v2 = r * Math.sin(robotAngle) - rightX;

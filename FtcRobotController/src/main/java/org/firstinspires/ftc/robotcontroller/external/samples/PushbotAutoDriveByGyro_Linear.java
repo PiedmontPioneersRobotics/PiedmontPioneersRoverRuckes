@@ -255,14 +255,14 @@ public class PushbotAutoDriveByGyro_Linear extends LinearOpMode {
      */
     public void gyroTurn (  double speed, double angle) {
 
-        // keep looping while we are still active, and not on heading.
-        while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
-            // Update telemetry & Allow time for other processes to run.
-            telemetry.update();
-        }
-    }
+     // keep looping while we are still active, and not on heading.
+     while (opModeIsActive() && !onHeading(speed, angle, P_TURN_COEFF)) {
+     // Update telemetry & Allow time for other processes to run.
+     telemetry.update();
+     }
+     }
 
-    /**
+     /**
      *  Method to obtain & hold a heading for a finite amount of time
      *  Move will stop once the requested time has elapsed
      *

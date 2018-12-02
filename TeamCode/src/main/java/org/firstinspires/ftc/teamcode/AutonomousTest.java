@@ -53,52 +53,88 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="AutonomousTest", group="Linear Opmode")
+@Autonomous(name="Autonomous", group="Linear Opmode")
 //@Disabled
 public class AutonomousTest extends LinearOpMode {
     Robot robot = new Robot();
 
     @Override
     public void runOpMode() {
+        waitForStart();
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         robot.init(hardwareMap);
+//        goToCrater(1);
+//        goToCrater(2);
+    //    findGold();
+    //    deployMarker();
         // run until the end of the match (driver presses STOP)
 
-
-
-        robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        telemetry.addData("Path0",  "Starting at %7d :%7d",
-                robot.leftFrontDrive.getCurrentPosition(),
-                robot.rightFrontDrive.getCurrentPosition(),
-                robot.leftBackDrive.getCurrentPosition(),
-                robot.rightBackDrive.getCurrentPosition());
-        telemetry.update();
-
-        waitForStart();
-
-        robot.leftFrontDrive.setPower(0);
-        robot.rightFrontDrive.setPower(0);
-        robot.leftBackDrive.setPower(0);
-        robot.rightBackDrive.setPower(0);
-        while (opModeIsActive() && !(robot.leftFrontDrive.getCurrentPosition() >= 288   )) {
-            robot.leftFrontDrive.setPower(0.25);
-            robot.rightFrontDrive.setPower(0.25);
-            robot.leftBackDrive.setPower(0.25);
-            robot.rightBackDrive.setPower(0.25);
+    }
+    /**
+     * Deploys marker from position POSN.
+     * POSN = 1 is starting spot in front of crater.
+     * POSN = 2 is starting spot in front of depot.
+     */
+    public void deployMarker(int posn){
+        if(posn == 1){
+            robot.driveForward(0.1, 10);
+            robot.gyroTurn(0.1, 270);
+            robot.driveForward(0.1, 130);
+            robot.gyroTurn(0.1, 315);
+            robot.driveForward(0.1, 200);
+            robot.gyroTurn(0.1, 180);
+            //robot.dumpMarker
         }
-        robot.leftFrontDrive.setPower(0);
-        robot.rightFrontDrive.setPower(0);
-        robot.leftBackDrive.setPower(0);
-        robot.rightBackDrive.setPower(0);
+     else if(posn == 2){
+            robot.driveForward(0.1, 10);
+            robot.gyroTurn(0.1, 270);
+            robot.driveForward(0.1, 60);
+            robot.gyroTurn(0.1, 90);
+            robot.driveForward(0.1, 100);
+            robot.gyroTurn(0.1, 45);
+            robot.driveForward(0.1, 100);
+            robot.gyroTurn(0.1, 90);
+
+        }
+
+    }
+   public void findGold (){
+        int posn = robot.findGoldPosition();
+
+        if (posn == 0) {
+            //fix this
+        }
+        else if (posn == 1) {
+            //fix this
+        }
+        else if (posn == 2) {
+            //fix this
+        }
+        else {
+            telemetry.addLine("Can't find gold");
+        }
+    }
+
+
+    /**
+     * Drives to crater from position POSN.
+     * POSN = 1 is starting spot in front of crater.
+     * POSN = 2 is starting spot in front of depot.
+     * POSN = 3 is from inside depot after placing marker.
+     */
+    public void goToCrater (int posn) {
+        if (posn == 1) {
+            robot.driveForward(0.1, 130);
+        } else if (posn == 2) {
+//            robot.driveForward(0.1,130);
+            robot.gyroTurn(0.5, 135);
+//            robot.driveForward(0.1,220);
+
+        } else if (posn == 3) {
+            robot.driveForward(0.1,250);
+
+        }
     }
 }
+
