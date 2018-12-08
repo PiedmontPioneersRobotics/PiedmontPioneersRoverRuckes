@@ -107,7 +107,6 @@ public class AutonomousTest extends LinearOpMode {
         int posn = robot.findGoldPosition();
 
         if (posn == 0) {
-            //fix this
         }
         else if (posn == 1) {
             //fix this

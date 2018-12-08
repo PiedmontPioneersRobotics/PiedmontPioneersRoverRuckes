@@ -29,10 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -61,7 +63,19 @@ public class MecanumDrive extends OpMode
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
-
+    public DcMotor leftFrontDrive;
+    public DcMotor leftBackDrive;
+    public DcMotor rightFrontDrive;
+    public DcMotor rightBackDrive;
+    public DcMotor extender;
+    public DcMotor lifter2;
+    public DcMotor lifter1;
+    public DcMotor spinner;
+    public Servo s1;
+    public Servo s2;
+    public Servo ms1;
+    public Servo ms2;
+    ModernRoboticsI2cGyro gyro    = null;
 
     // Declare OpMode members.
     Robot robot = new Robot();
@@ -70,8 +84,28 @@ public class MecanumDrive extends OpMode
 @Override
     public void init() {
 
+
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+    leftFrontDrive = hardwareMap.get(DcMotor.class, "lf");
+    leftBackDrive = hardwareMap.get(DcMotor.class, "lb");
+    rightFrontDrive = hardwareMap.get(DcMotor.class, "rf");
+    rightBackDrive = hardwareMap.get(DcMotor.class, "rb");
+    leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+    leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+    lifter1 = hardwareMap.get(DcMotor.class, "lifter1");
+    lifter2 = hardwareMap.get(DcMotor.class, "lifter2");
+    spinner = hardwareMap.get(DcMotor.class, "spinner");
+    extender = hardwareMap.get(DcMotor.class, "extender");
+    s1 = hardwareMap.get(Servo.class, "s1");
+    s2 = hardwareMap.get(Servo.class, "s2");
+    ms1 = hardwareMap.get(Servo.class, "ms1");
+    ms2 = hardwareMap.get(Servo.class, "ms2");
+    gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
+    gyro.calibrate();
+    s2.setDirection(Servo.Direction.REVERSE);
+    ms2.setDirection(Servo.Direction.REVERSE);
+
     }
 
     /*
@@ -94,7 +128,7 @@ public class MecanumDrive extends OpMode
      */
     @Override
     public void loop() {
-        robot.init(hardwareMap);
+        // robot.init(hardwareMap);
         // Setup a variable for each drive wheel to save power level for telemetry
         double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
         double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4; //this could make it slow
@@ -103,14 +137,65 @@ public class MecanumDrive extends OpMode
         final double v2 = r * Math.sin(robotAngle) - rightX;
         final double v3 = r * Math.sin(robotAngle) + rightX;
         final double v4 = r * Math.cos(robotAngle) - rightX;
-        robot.leftFrontDrive.setPower(v1);
-        robot.rightFrontDrive.setPower(v2);
-        robot.leftBackDrive.setPower(v3);
-        robot.rightBackDrive.setPower(v4);
+        leftFrontDrive.setPower(v1 / 2);
+        rightFrontDrive.setPower(v2 / 2);
+        leftBackDrive.setPower(v3 / 2);
+        rightBackDrive.setPower(v4 / 2);
 
+        if (gamepad1.b) {
+            spinner.setPower(.5);
+        } else {
+            spinner.setPower(0);
+        }
+        if (gamepad1.dpad_up) {
+            extender.setPower(1);
+        } else {
+            extender.setPower(0);
+        }
+        if (gamepad1.dpad_down) {
+            extender.setPower(-1);
+        } else {
+            extender.setPower(0);
+        }
+        if (gamepad1.y) {
+            lifter1.setPower(1);
+            lifter2.setPower(1);
+        } else {
+            lifter1.setPower(0);
+            lifter2.setPower(0);
+        }
+        if (gamepad1.a) {
+            lifter1.setPower(-1);
+            lifter2.setPower(-1);
+        } else {
+            lifter1.setPower(0);
+            lifter2.setPower(0);
+        }
+        if (gamepad1.left_trigger > 0) {
+            ms1.setPosition(gamepad1.left_trigger);
+            ms2.setPosition(gamepad1.left_trigger);
+        } else {
+            ms1.setPosition(0);
+            ms2.setPosition(0);
+        }
+        if (gamepad1.right_trigger > 0) {
+            s1.setPosition(gamepad1.right_trigger);
+            s2.setPosition(gamepad1.right_trigger);
+        } else {
+            s1.setPosition(0);
+            s2.setPosition(0);
+        }
+
+
+
+
+
+
+        
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", v1);
+
     }
 
     /*
@@ -120,10 +205,10 @@ public class MecanumDrive extends OpMode
 
 
     public void stop() {
-        robot.leftFrontDrive.setPower(0);
-        robot.rightFrontDrive.setPower(0);
-        robot.leftBackDrive.setPower(0);
-        robot.rightBackDrive.setPower(0);
+        leftFrontDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightBackDrive.setPower(0);
     }
 
  /*

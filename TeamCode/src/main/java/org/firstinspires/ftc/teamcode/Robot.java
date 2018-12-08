@@ -37,6 +37,15 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import java.util.List;
+
+
+
 /**
  * This is NOT an opmode.
  * <p>
@@ -59,7 +68,44 @@ public class Robot {
     public DcMotor leftBackDrive;
     public DcMotor rightFrontDrive;
     public DcMotor rightBackDrive;
+    public DcMotor extender;
+    public DcMotor lifter2;
+    public DcMotor lifter1;
+    public DcMotor spinner;
+    public Servo s1;
+    public Servo s2;
+    public Servo ms1;
+    public Servo ms2;
     ModernRoboticsI2cGyro gyro    = null;
+    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
+    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
+    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
+
+    /*
+     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
+     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
+     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
+     * web site at https://developer.vuforia.com/license-manager.
+     *
+     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
+     * random data. As an example, here is a example of a fragment of a valid key:
+     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
+     * Once you've obtained a license key, copy the string from the Vuforia web site
+     * and paste it in to your code on the next line, between the double quotes.
+     */
+    private static final String VUFORIA_KEY = "AdxdfHj/////AAABmWFr3OreokO4ol3sHH5ARISKZYDDsb5hrm3pNHK6sOioDra5wPPlR9JyyqP++iO89OptqJ/FtMLzeHBJYUYHWvwtKwFfMtXNvjT1LtXWU2BDNDHE/Eqf9M/JE5eJPbkGj+FGf+r9zhbo/CAwcFodR0kVXYpTpdE82a+RTPodKbuLmFUM8q7ksKUh4UDn8nK6Ui49bJiDoRN2f7rRk4qaoBj2vDOEW5kp47IzxOYllP4KsRY6H7p09Aa1GFkQqRlU1cy7pmPPzxbbs5TyXQoD4UCayYiQcWpULPK9aA6PV7p7WLoqi7RbXX/1rRGttyOW+UNs6i0cD1om0Jd1bRClWnqU1fros5L+HtDXxfxvpvSp";
+
+    /**
+     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+     * localization engine.
+     */
+    private VuforiaLocalizer vuforia;
+
+    /**
+     * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
+     * Detection engine.
+     */
+    private TFObjectDetector tfod;
 
     final double numTicks = 112;
     final double pi = Math.PI;
@@ -89,6 +135,14 @@ public class Robot {
         leftBackDrive = ahwMap.get(DcMotor.class, "lb");
         rightFrontDrive = ahwMap.get(DcMotor.class, "rf");
         rightBackDrive = ahwMap.get(DcMotor.class, "rb");
+        lifter1 = ahwMap.get(DcMotor.class, "lifter1");
+        lifter2 = ahwMap.get(DcMotor.class, "lifter2");
+        spinner = ahwMap.get(DcMotor.class, "spinner");
+        extender = ahwMap.get(DcMotor.class, "extender");
+        s1 = ahwMap.get(Servo.class, "s1");
+        s2 = ahwMap.get(Servo.class, "s2");
+        ms1 = ahwMap.get(Servo.class, "ms1");
+        ms2 = ahwMap.get(Servo.class, "ms2");
         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("gyro");
         gyro.calibrate();
 
@@ -285,6 +339,106 @@ public class Robot {
     public int findGoldPosition () {
         int posn = -1;
 
+
+    initVuforia();
+
+        if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+        initTfod();
+        } else {
         return posn;
+        }
+        if (tfod != null) {
+            tfod.activate();
+        }
+
+        while (posn < 0) {
+            if (tfod != null) {
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    if (updatedRecognitions.size() == 3) {
+                        int goldMineralX = -1;
+                        int silverMineral1X = -1;
+                        int silverMineral2X = -1;
+                        for (Recognition recognition : updatedRecognitions) {
+                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                goldMineralX = (int) recognition.getLeft();
+                            } else if (silverMineral1X == -1) {
+                                silverMineral1X = (int) recognition.getLeft();
+                            } else {
+                                silverMineral2X = (int) recognition.getLeft();
+                            }
+                        }
+                        if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                posn = 0;
+                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                posn = 2;
+                            } else {
+                                posn = 1;
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+        if (tfod != null) {
+            tfod.shutdown();
+        }
+        return posn;
+    }
+
+    /**
+     * Initialize the Vuforia localization engine.
+     */
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = CameraDirection.BACK;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
+    }
+
+    /**
+     * Initialize the Tensor Flow Object Detection engine.
+     */
+    private void initTfod() {
+        int tfodMonitorViewId = hwMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", hwMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+    }
+
+    public void spin (double pwr) {
+        spinner.setPower(pwr);
+    }
+
+    public void extend (double pwr) {
+        extender.setPower(pwr);
+    }
+
+    public void lift (double pwr) {
+        lifter1.setPower(pwr);
+        lifter2.setPower(pwr);
+    }
+
+    public void liftExtender (double pos) {
+        ms1.setPosition(pos);
+        ms2.setPosition(pos);
+    }
+
+    public void liftScoop (double pos) {
+        s1.setPosition(pos);
+        s2.setPosition(pos);
     }
 }
