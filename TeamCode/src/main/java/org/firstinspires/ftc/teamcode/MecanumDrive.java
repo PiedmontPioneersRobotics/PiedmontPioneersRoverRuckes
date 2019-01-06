@@ -56,6 +56,10 @@ import com.qualcomm.robotcore.util.Range;
 //@Disabled
 public class MecanumDrive extends OpMode
 {
+    /**
+     * this starts all of the motors and servos and gyro
+     */
+
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
@@ -87,6 +91,9 @@ public class MecanumDrive extends OpMode
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
+    /**
+     * this defines all of the motors/servos/gyros to the phone
+     */
     leftFrontDrive = hardwareMap.get(DcMotor.class, "lf");
     leftBackDrive = hardwareMap.get(DcMotor.class, "lb");
     rightFrontDrive = hardwareMap.get(DcMotor.class, "rf");
@@ -130,6 +137,9 @@ public class MecanumDrive extends OpMode
     public void loop() {
         // robot.init(hardwareMap);
         // Setup a variable for each drive wheel to save power level for telemetry
+        /**
+         * this is how the joysticks drive the wheels
+          */
         double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
         double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4; //this could make it slow
         double rightX = gamepad1.right_stick_x;
@@ -142,6 +152,9 @@ public class MecanumDrive extends OpMode
         leftBackDrive.setPower(v3 / 2);
         rightBackDrive.setPower(v4 / 2);
 
+        /**
+         * It tells what the keys on the gamepad are meant to do
+         */
         if (gamepad1.b) {
             spinner.setPower(.5);
         } else {
@@ -188,10 +201,6 @@ public class MecanumDrive extends OpMode
 
 
 
-
-
-
-        
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", v1);
@@ -203,6 +212,9 @@ public class MecanumDrive extends OpMode
      */
     @Override
 
+    /**
+     * this stops all the motors
+     */
 
     public void stop() {
         leftFrontDrive.setPower(0);

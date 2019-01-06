@@ -53,6 +53,9 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
+/**
+ * starts the code
+ */
 @Autonomous(name="Autonomous", group="Linear Opmode")
 //@Disabled
 public class AutonomousTest extends LinearOpMode {
@@ -76,8 +79,16 @@ public class AutonomousTest extends LinearOpMode {
      * POSN = 1 is starting spot in front of crater.
      * POSN = 2 is starting spot in front of depot.
      */
+
+    /**
+     * deploys marker from 2 different positions
+     */
+
     public void deployMarker(int posn){
         if(posn == 1){
+            /**
+             * goes from pointing at depot
+             */
             robot.driveForward(0.1, 10);
             robot.gyroTurn(0.1, 270);
             robot.driveForward(0.1, 130);
@@ -87,6 +98,9 @@ public class AutonomousTest extends LinearOpMode {
             //robot.dumpMarker
         }
      else if(posn == 2){
+            /**
+             * goes from pointing at crtera
+             */
             robot.driveForward(0.1, 10);
             robot.gyroTurn(0.1, 270);
             robot.driveForward(0.1, 60);
@@ -126,15 +140,27 @@ public class AutonomousTest extends LinearOpMode {
      * POSN = 2 is starting spot in front of depot.
      * POSN = 3 is from inside depot after placing marker.
      */
+    /**
+     * goes to crater
+     */
     public void goToCrater (int posn) {
         if (posn == 1) {
+            /**
+             * from pointing at crater
+             */
             robot.driveForward(0.1, 130);
         } else if (posn == 2) {
+            /**
+             * from pointing at depot
+             */
 //            robot.driveForward(0.1,130);
             robot.gyroTurn(0.5, 135);
 //            robot.driveForward(0.1,220);
 
         } else if (posn == 3) {
+            /**
+             * from depot
+             */
             robot.driveForward(0.1,250);
 
         }

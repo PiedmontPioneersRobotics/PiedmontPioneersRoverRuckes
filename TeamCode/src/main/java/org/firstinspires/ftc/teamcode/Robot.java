@@ -62,6 +62,10 @@ import java.util.List;
  * Servo channel:  Servo to open left claw:  "left_hand"
  * Servo channel:  Servo to open right claw: "right_hand"
  */
+
+/**
+ * This defines all motors and servos and the gyro
+ */
 public class Robot {
     /* Public OpMode members. */
     public DcMotor leftFrontDrive;
@@ -149,7 +153,7 @@ public class Robot {
         // make sure the gyro is calibrated before continuing
         while (gyro.isCalibrating())  {}
 
-
+        // This tells it to run using encoder for the drive motors
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -166,19 +170,21 @@ public class Robot {
         rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
     }
 
-
+        // This stops and resets all encoders
     public void encoderTurn(double degrees) {
         double distance = 2 * pi * radius * (degrees / 360);
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
+        // This say to run the robot using encoders
         leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+/**
+ *  this tells it to go forward for a certain distance
+ */
         while (leftFrontDrive.getCurrentPosition() < distance &&
                 leftBackDrive.getCurrentPosition() < distance &&
                 rightFrontDrive.getCurrentPosition() > -distance &&
@@ -195,6 +201,9 @@ public class Robot {
 
     }
 
+    /**
+     *this is the method to drive forward
+     */
     public void driveForward(double speed, double distance) {
         double encoderDistance = (distance / (diameter * pi)) * 112;
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -229,6 +238,9 @@ public class Robot {
 
     }
 
+    /**
+     * turns using gyro
+     */
     public void gyroTurn(double speed, double angle) {
 
         // keep looping while we are still active, and not on heading.
@@ -246,6 +258,9 @@ public class Robot {
      *                 0 = fwd. +ve is CCW from fwd. -ve is CW from forward.
      *                 If a relative angle is required, add/subtract from current heading.
      * @param holdTime Length of time (in seconds) to hold the specified heading.
+     */
+    /**
+     * drives forward with gyro assistance
      */
     public void gyroHold(double speed, double angle, double holdTime) {
 
@@ -339,7 +354,9 @@ public class Robot {
     public int findGoldPosition () {
         int posn = -1;
 
-
+/**
+ * finds gold position
+ */
     initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -419,24 +436,39 @@ public class Robot {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
 
+    /**
+     * spins the spinner
+     */
     public void spin (double pwr) {
         spinner.setPower(pwr);
     }
 
+    /**
+     * extends the extender
+     */
     public void extend (double pwr) {
         extender.setPower(pwr);
     }
 
+    /**
+     * lifts the lifter
+     */
     public void lift (double pwr) {
         lifter1.setPower(pwr);
         lifter2.setPower(pwr);
     }
 
+    /**
+     * lifts the extender
+     */
     public void liftExtender (double pos) {
         ms1.setPosition(pos);
         ms2.setPosition(pos);
     }
 
+    /**
+     * lifts the scooper
+     */
     public void liftScoop (double pos) {
         s1.setPosition(pos);
         s2.setPosition(pos);
