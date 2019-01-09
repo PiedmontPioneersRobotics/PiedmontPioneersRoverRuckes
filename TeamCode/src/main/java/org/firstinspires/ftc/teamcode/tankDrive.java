@@ -50,7 +50,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Mecanum drive", group="Iterative Opmode")
+@TeleOp(name="Tank drive", group="Iterative Opmode")
 //@Disabled
 public class tankDrive extends OpMode
 {
@@ -125,6 +125,18 @@ public class tankDrive extends OpMode
         leftDrive.setPower(power);
         power = gamepad1.right_stick_y;
         rightDrive.setPower(power);
+
+        if (gamepad1.b) {
+            double sPosition = 0;
+            servo.setPosition(sPosition);
+            sPosition ++;
+        }
+
+        if (!gamepad1.b) {
+            double sPosition = 0;
+            servo.setPosition(sPosition);
+        }
+
 
 
         // robot.init(hardwareMap);

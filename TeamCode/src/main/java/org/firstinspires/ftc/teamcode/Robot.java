@@ -70,15 +70,18 @@ public class Robot {
     /* Public OpMode members. */
     public DcMotor leftDrive;
     public DcMotor rightDrive;
-    public DcMotor extender;
-    public DcMotor lifter2;
-    public DcMotor lifter1;
-    public DcMotor spinner;
-    public Servo s1;
-    public Servo s2;
-    public Servo ms1;
-    public Servo ms2;
-    ModernRoboticsI2cGyro gyro    = null;
+    /**
+     * public DcMotor extender;
+     * public DcMotor lifter2;
+     * public DcMotor lifter1;
+     * public DcMotor spinner;
+     * public Servo s1;
+     * public Servo s2;
+     * public Servo ms1;
+     * public Servo ms2;
+     * */
+     ModernRoboticsI2cGyro gyro    = null;
+
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -114,9 +117,9 @@ public class Robot {
     final double diameter = 4 * 2.54;
     final double radius = 25;
 
-    static final double     HEADING_THRESHOLD       = 1 ;      // As tight as we can make it with an integer gyro
-    static final double     P_TURN_COEFF            = 0.1;     // Larger is more responsive, but also less stable
-    static final double     P_DRIVE_COEFF           = 0.15;
+    static final double HEADING_THRESHOLD = 1;      // As tight as we can make it with an integer gyro
+    static final double P_TURN_COEFF = 0.1;     // Larger is more responsive, but also less stable
+    static final double P_DRIVE_COEFF = 0.15;
 
 
     /* local OpMode members. */
@@ -135,26 +138,31 @@ public class Robot {
 
         leftDrive = ahwMap.get(DcMotor.class, "ld");
         rightDrive = ahwMap.get(DcMotor.class, "rd");
-        lifter1 = ahwMap.get(DcMotor.class, "lifter1");
-        lifter2 = ahwMap.get(DcMotor.class, "lifter2");
-        spinner = ahwMap.get(DcMotor.class, "spinner");
-        extender = ahwMap.get(DcMotor.class, "extender");
-        s1 = ahwMap.get(Servo.class, "s1");
-        s2 = ahwMap.get(Servo.class, "s2");
-        ms1 = ahwMap.get(Servo.class, "ms1");
-        ms2 = ahwMap.get(Servo.class, "ms2");
-        gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("gyro");
-        gyro.calibrate();
+        /**
+         lifter1 = ahwMap.get(DcMotor.class, "lifter1");
+         lifter2 = ahwMap.get(DcMotor.class, "lifter2");
+         spinner = ahwMap.get(DcMotor.class, "spinner");
+         extender = ahwMap.get(DcMotor.class, "extender");
+         s1 = ahwMap.get(Servo.class, "s1");
+         s2 = ahwMap.get(Servo.class, "s2");
+         ms1 = ahwMap.get(Servo.class, "ms1");
+         ms2 = ahwMap.get(Servo.class, "ms2");
+         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("gyro");
+         gyro.calibrate();
+         */
 
         // make sure the gyro is calibrated before continuing
-        while (gyro.isCalibrating())  {}
+        //while
+        /**
+         (gyro.isCalibrating())  {}
+         */
 
         // This tells it to run using encoder for the drive motors
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
 
-        gyro.resetZAxisIntegrator();
+        //gyro.resetZAxisIntegrator();
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -162,7 +170,7 @@ public class Robot {
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
     }
 
-        // This stops and resets all encoders
+    // This stops and resets all encoders
     public void encoderTurn(double degrees) {
         double distance = 2 * pi * radius * (degrees / 360);
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -184,7 +192,7 @@ public class Robot {
     }
 
     /**
-     *this is the method to drive forward
+     * this is the method to drive forward
      */
     public void driveForward(double speed, double distance) {
         double encoderDistance = (distance / (diameter * pi)) * 112;
@@ -293,17 +301,15 @@ public class Robot {
      * @return error angle: Degrees in the range +/- 180. Centered on the robot's frame of reference
      * +ve error means the robot should turn LEFT (CCW) to reduce error.
      */
+
     public double getError(double targetAngle) {
 
         double robotError;
-
-        // calculate error in -179 to +180 range  (
         robotError = targetAngle - gyro.getIntegratedZValue();
-        while (robotError > 180) robotError -= 360;
+           while (robotError > 180) robotError -= 360;
         while (robotError <= -180) robotError += 360;
         return robotError;
     }
-
     /**
      * returns desired steering force.  +/- 1 range.  +ve = steer left
      *
@@ -406,37 +412,37 @@ public class Robot {
      * spins the spinner
      */
     public void spin (double pwr) {
-        spinner.setPower(pwr);
+       // spinner.setPower(pwr);
     }
 
     /**
      * extends the extender
      */
     public void extend (double pwr) {
-        extender.setPower(pwr);
+      //  extender.setPower(pwr);
     }
 
     /**
      * lifts the lifter
      */
     public void lift (double pwr) {
-        lifter1.setPower(pwr);
-        lifter2.setPower(pwr);
+       // lifter1.setPower(pwr);
+      //  lifter2.setPower(pwr);
     }
 
     /**
      * lifts the extender
      */
     public void liftExtender (double pos) {
-        ms1.setPosition(pos);
-        ms2.setPosition(pos);
+      //  ms1.setPosition(pos);
+       // ms2.setPosition(pos);
     }
 
     /**
      * lifts the scooper
      */
     public void liftScoop (double pos) {
-        s1.setPosition(pos);
-        s2.setPosition(pos);
+       // s1.setPosition(pos);
+        //s2.setPosition(pos);
     }
 }

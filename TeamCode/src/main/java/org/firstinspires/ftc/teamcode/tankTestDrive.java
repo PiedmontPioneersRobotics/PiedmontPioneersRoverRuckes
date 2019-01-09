@@ -29,12 +29,12 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 /**
  * This file contains an example of an iterative (Non-Linear) "OpMode".
@@ -49,31 +49,52 @@ import com.qualcomm.robotcore.util.Range;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
+//useless comment
 
-@TeleOp(name="MotorTest", group="Iterative Opmode")
-@Disabled
-public class MotorTest extends OpMode
-{
-    // Declare OpMode members.
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motor;
-
-    /*
-     * Code to run ONCE when the driver hits INIT
+@TeleOp(name="Tank test drive", group="Iterative Opmode")
+//@Disabled
+public class tankTestDrive extends OpMode {
+    /**
+     * this starts all of the motors and servos and gyro
      */
+
+    static final double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
+    //useless comment
+    static final double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
+    static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+            (WHEEL_DIAMETER_INCHES * 3.1415);
+    static final double DRIVE_SPEED = 0.6;
+    static final double TURN_SPEED = 0.5;
+    public DcMotor leftDrive;
+    public DcMotor rightDrive;
+    // Declare OpMode members.
+    Robot robot = new Robot();
+    private ElapsedTime runtime = new ElapsedTime();
+
     @Override
     public void init() {
+
+
+        // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
-        motor = hardwareMap.get(DcMotor.class, "motor0");
+        /**
+         * this defines all of the motors/servos/gyros to the phone
+         */
+        leftDrive = hardwareMap.get(DcMotor.class, "ld");
+        rightDrive = hardwareMap.get(DcMotor.class, "rd");
+
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
     }
 
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
+
     @Override
     public void init_loop() {
     }
-
+    //hi people this is useless code yall
     /*
      * Code to run ONCE when the driver hits PLAY
      */
@@ -92,18 +113,8 @@ public class MotorTest extends OpMode
         //int position = motor.getCurrentPosition();
         telemetry.addData("Encoder Position", "ghj");
         power = gamepad1.left_stick_y;
-        motor.setPower(power);
-        // Show the elapsed game time and whe  el power.
-//        telemetry.addData("Status", "Run Time: " + runtime.toString());
-//        telemetry.addData("Motor" , power);
-//        telemetry.addData("gamepad" , gamepad1.left_stick_y);
-//        telemetry.addData("gamepad" , "add the encoder value");
+        leftDrive.setPower(power);
+        power = gamepad1.right_stick_y;
+        rightDrive.setPower(power);
     }
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
-    @Override
-    public void stop() {
-    }
-
 }
