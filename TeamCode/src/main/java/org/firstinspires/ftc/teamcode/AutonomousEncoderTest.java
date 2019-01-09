@@ -57,26 +57,34 @@ public class AutonomousEncoderTest extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
         robot.init(hardwareMap);
-        // run until the end of the match (driver presses STOP)
 
-
-        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        /**
+         * stops all the motors and resets the encoders
+         */
         robot.leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        /**
+         * starts all the encoders
+         */
+        robot.rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+        /**
+         * adds the data to the telemetry
+         */
         telemetry.addData("Path0", "Starting at %7d :%7d",
                 robot.leftFrontDrive.getCurrentPosition(),
                 robot.rightFrontDrive.getCurrentPosition(),
                 robot.leftBackDrive.getCurrentPosition(),
                 robot.rightBackDrive.getCurrentPosition());
         telemetry.update();
-
+        /**
+         * waits for the start then drives forward for 200 ticks
+         */
         waitForStart();
         robot.leftFrontDrive.setTargetPosition(200);
         robot.leftBackDrive.setTargetPosition(200);
@@ -85,6 +93,9 @@ public class AutonomousEncoderTest extends LinearOpMode {
         while (robot.leftFrontDrive.isBusy() && opModeIsActive()) {
             //Loop body can be empty
         }
+        /**
+         * stops all motors
+         */
         robot.leftFrontDrive.setPower(0);
         robot.leftBackDrive.setPower(0);
         robot.rightFrontDrive.setPower(0);

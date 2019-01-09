@@ -68,10 +68,8 @@ import java.util.List;
  */
 public class Robot {
     /* Public OpMode members. */
-    public DcMotor leftFrontDrive;
-    public DcMotor leftBackDrive;
-    public DcMotor rightFrontDrive;
-    public DcMotor rightBackDrive;
+    public DcMotor leftDrive;
+    public DcMotor rightDrive;
     public DcMotor extender;
     public DcMotor lifter2;
     public DcMotor lifter1;
@@ -135,10 +133,8 @@ public class Robot {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
-        leftFrontDrive = ahwMap.get(DcMotor.class, "lf");
-        leftBackDrive = ahwMap.get(DcMotor.class, "lb");
-        rightFrontDrive = ahwMap.get(DcMotor.class, "rf");
-        rightBackDrive = ahwMap.get(DcMotor.class, "rb");
+        leftDrive = ahwMap.get(DcMotor.class, "ld");
+        rightDrive = ahwMap.get(DcMotor.class, "rd");
         lifter1 = ahwMap.get(DcMotor.class, "lifter1");
         lifter2 = ahwMap.get(DcMotor.class, "lifter2");
         spinner = ahwMap.get(DcMotor.class, "spinner");
@@ -154,50 +150,36 @@ public class Robot {
         while (gyro.isCalibrating())  {}
 
         // This tells it to run using encoder for the drive motors
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Wait for the game to start (Display Gyro value), and reset gyro before we move..
 
         gyro.resetZAxisIntegrator();
 
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
     }
 
         // This stops and resets all encoders
     public void encoderTurn(double degrees) {
         double distance = 2 * pi * radius * (degrees / 360);
-        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         // This say to run the robot using encoders
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 /**
  *  this tells it to go forward for a certain distance
  */
-        while (leftFrontDrive.getCurrentPosition() < distance &&
-                leftBackDrive.getCurrentPosition() < distance &&
-                rightFrontDrive.getCurrentPosition() > -distance &&
-                rightBackDrive.getCurrentPosition() > -distance) {
-            leftFrontDrive.setPower(1);
-            leftBackDrive.setPower(1);
-            rightFrontDrive.setPower(-1);
-            rightBackDrive.setPower(-1);
+        while (leftDrive.getCurrentPosition() < distance &&
+                rightDrive.getCurrentPosition() > -distance) {
+            leftDrive.setPower(1);
+            rightDrive.setPower(-1);
         }
-        leftFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        rightBackDrive.setPower(0);
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
 
     }
 
@@ -206,35 +188,23 @@ public class Robot {
      */
     public void driveForward(double speed, double distance) {
         double encoderDistance = (distance / (diameter * pi)) * 112;
-        leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFrontDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightBackDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        while (leftFrontDrive.getCurrentPosition() < encoderDistance &&
-                leftBackDrive.getCurrentPosition() < encoderDistance &&
-                rightFrontDrive.getCurrentPosition() < encoderDistance &&
-                rightBackDrive.getCurrentPosition() < encoderDistance) {
-            leftFrontDrive.setPower(speed);
-            leftBackDrive.setPower(speed);
-            rightFrontDrive.setPower(speed);
-            rightBackDrive.setPower(speed);
+        while (leftDrive.getCurrentPosition() < encoderDistance &&
+                rightDrive.getCurrentPosition() < encoderDistance) {
+            leftDrive.setPower(speed);
+            rightDrive.setPower(speed);
         }
-        leftFrontDrive.setPower(-1);
-        leftBackDrive.setPower(-1);
-        rightFrontDrive.setPower(-1);
-        rightBackDrive.setPower(-1);
+        leftDrive.setPower(-1);
+        rightDrive.setPower(-1);
         for (int i = 0; i < 100000; i++) {
         }
-        leftFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        rightBackDrive.setPower(0);
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
 
     }
 
@@ -274,10 +244,8 @@ public class Robot {
         }
 
         // Stop all motion;
-        leftFrontDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightBackDrive.setPower(0);
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
 
     }
 
@@ -311,10 +279,8 @@ public class Robot {
             rightSpeed = speed * steer;
             leftSpeed = -rightSpeed;
             // Send desired speeds to motors.
-            leftFrontDrive.setPower(leftSpeed);
-            rightFrontDrive.setPower(rightSpeed);
-            leftBackDrive.setPower(leftSpeed);
-            rightBackDrive.setPower(rightSpeed);
+            leftDrive.setPower(leftSpeed);
+            rightDrive.setPower(rightSpeed);
 
         }
         return onTarget;
