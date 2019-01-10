@@ -126,15 +126,18 @@ public class tankDrive extends OpMode
         power = gamepad1.right_stick_y;
         rightDrive.setPower(power);
 
-        if (gamepad1.b) {
+        double msPosition;
+        while (gamepad1.b) {
             double sPosition = 0;
             servo.setPosition(sPosition);
-            sPosition ++;
+            if (sPosition <= 100) {
+                sPosition += 0.01;
+            }
         }
+        servo.setPosition(0);
 
-        if (!gamepad1.b) {
-            double sPosition = 0;
-            servo.setPosition(sPosition);
+        while (gamepad1.left_bumper) {
+            msPosition += 0.01
         }
 
 

@@ -94,7 +94,6 @@ public class tankTestDrive extends OpMode {
     @Override
     public void init_loop() {
     }
-    //hi people this is useless code yall
     /*
      * Code to run ONCE when the driver hits PLAY
      */
