@@ -114,7 +114,7 @@ public class tankDrive extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
-    @Override
+  //  @Override
     double msPosition = 0;
     double sPosition = 0;
 

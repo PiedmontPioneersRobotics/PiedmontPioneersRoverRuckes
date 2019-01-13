@@ -44,6 +44,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
+
 public class Robot {
     /* Public OpMode members. */
 
@@ -53,6 +54,31 @@ public class Robot {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
+
+    final double diameter = 4 * 2.54;
+    final double pi = Math.PI;
+
+    public void driveForward(double speed, double distance) {
+        double encoderDistance = (distance / (diameter * pi)) * 112;
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        while (leftDrive.getCurrentPosition() < encoderDistance &&
+                rightDrive.getCurrentPosition() < encoderDistance) {
+            leftDrive.setPower(speed);
+            rightDrive.setPower(speed);
+        }
+        leftDrive.setPower(-1);
+        rightDrive.setPower(-1);
+        for (int i = 0; i < 100000; i++) {
+        }
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+
+    }
 
 
 }

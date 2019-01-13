@@ -68,7 +68,7 @@ import java.util.List;
  */
 
 //useless comment
-public class Robot {
+public class oldRobot {
     /* Public OpMode members. */
     public DcMotor leftDrive;
     public DcMotor rightDrive;
@@ -82,7 +82,7 @@ public class Robot {
      * public Servo ms1;
      * public Servo ms2;
      * */
-     ModernRoboticsI2cGyro gyro    = null;
+    ModernRoboticsI2cGyro gyro    = null;
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -129,7 +129,7 @@ public class Robot {
     private ElapsedTime period = new ElapsedTime();
 
     /* Constructor */
-    public Robot() {
+    public oldRobot() {
 
     }
 
@@ -308,7 +308,7 @@ public class Robot {
 
         double robotError;
         robotError = targetAngle - gyro.getIntegratedZValue();
-           while (robotError > 180) robotError -= 360;
+        while (robotError > 180) robotError -= 360;
         while (robotError <= -180) robotError += 360;
         return robotError;
     }
@@ -331,12 +331,12 @@ public class Robot {
 /**
  * finds gold position
  */
-    initVuforia();
+        initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-        initTfod();
+            initTfod();
         } else {
-        return posn;
+            return posn;
         }
         if (tfod != null) {
             tfod.activate();
@@ -370,10 +370,10 @@ public class Robot {
                                 posn = 1;
                             }
                         }
+                    }
                 }
             }
         }
-    }
 
         if (tfod != null) {
             tfod.shutdown();
@@ -414,37 +414,37 @@ public class Robot {
      * spins the spinner
      */
     public void spin (double pwr) {
-       // spinner.setPower(pwr);
+        // spinner.setPower(pwr);
     }
 
     /**
      * extends the extender
      */
     public void extend (double pwr) {
-      //  extender.setPower(pwr);
+        //  extender.setPower(pwr);
     }
 
     /**
      * lifts the lifter
      */
     public void lift (double pwr) {
-       // lifter1.setPower(pwr);
-      //  lifter2.setPower(pwr);
+        // lifter1.setPower(pwr);
+        //  lifter2.setPower(pwr);
     }
 
     /**
      * lifts the extender
      */
     public void liftExtender (double pos) {
-      //  ms1.setPosition(pos);
-       // ms2.setPosition(pos);
+        //  ms1.setPosition(pos);
+        // ms2.setPosition(pos);
     }
 
     /**
      * lifts the scooper
      */
     public void liftScoop (double pos) {
-       // s1.setPosition(pos);
+        // s1.setPosition(pos);
         //s2.setPosition(pos);
     }
 }
