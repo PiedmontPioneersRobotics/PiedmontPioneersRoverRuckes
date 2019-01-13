@@ -66,6 +66,8 @@ import java.util.List;
 /**
  * This defines all motors and servos and the gyro
  */
+
+//useless comment
 public class Robot {
     /* Public OpMode members. */
     public DcMotor leftDrive;

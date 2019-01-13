@@ -138,12 +138,12 @@ public class tankDrive extends OpMode
 
         while (gamepad1.left_bumper) {
             msPosition += 0.01;
-            Mservo.setPosition(msPosition)
+            Mservo.setPosition(msPosition);
         }
 
         while (gamepad1.right_bumper) {
             msPosition += -0.01;
-            Mservo.setPosition(msPosition)
+            Mservo.setPosition(msPosition);
         }
 
 

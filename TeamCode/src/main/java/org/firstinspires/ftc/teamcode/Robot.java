@@ -46,7 +46,13 @@ import java.util.List;
 
 public class Robot {
     /* Public OpMode members. */
+
     public DcMotor leftDrive;
     public DcMotor rightDrive;
+
+    private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
+    private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
+    private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
+
 
 }
