@@ -114,12 +114,11 @@ public class Robot {
         return Range.clip(error * PCoeff, -1, 1);
     }
     static final double P_TURN_COEFF = 0.1;
-    // useless comment
     // turn with gyro
     public void gyroTurn(double speed, double angle) {
         while (!onHeading(speed, angle, P_TURN_COEFF)) {}
     }
-    //turning bot servos
+    //turning the servos
     public double MservoMaxDegrees = 135;
     public void moveMegaServo (double angle) {
         Mservo.setPosition((1/MservoMaxDegrees)*angle);
