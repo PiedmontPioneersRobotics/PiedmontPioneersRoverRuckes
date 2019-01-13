@@ -115,19 +115,20 @@ public class tankDrive extends OpMode
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
     @Override
+    double msPosition = 0;
+    double sPosition = 0;
+
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
         double power;
         //int position = motor.getCurrentPosition();
         telemetry.addData("Encoder Position", "ghj");
-        power = gamepad1.left_stick_y;
+        power = gamepad1.left_stick_y/2;
         leftDrive.setPower(power);
-        power = gamepad1.right_stick_y;
+        power = gamepad1.right_stick_y/2;
         rightDrive.setPower(power);
 
-        double msPosition;
         while (gamepad1.b) {
-            double sPosition = 0;
             servo.setPosition(sPosition);
             if (sPosition <= 100) {
                 sPosition += 0.01;
@@ -136,7 +137,13 @@ public class tankDrive extends OpMode
         servo.setPosition(0);
 
         while (gamepad1.left_bumper) {
-          //  msPosition += 0.01
+            msPosition += 0.01;
+            Mservo.setPosition(msPosition)
+        }
+
+        while (gamepad1.right_bumper) {
+            msPosition += -0.01;
+            Mservo.setPosition(msPosition)
         }
 
 

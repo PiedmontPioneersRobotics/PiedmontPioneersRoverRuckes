@@ -26,7 +26,7 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/**
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
@@ -51,15 +51,11 @@ import com.qualcomm.robotcore.util.Range;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-/**
+
 @TeleOp(name="Mecanum drive", group="Iterative Opmode")
 //@Disabled
 public class MecanumDrive extends OpMode
 {
-    /**
-     * this starts all of the motors and servos and gyro
-     */
-/**
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
@@ -91,10 +87,6 @@ public class MecanumDrive extends OpMode
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
-    /**
-     * this defines all of the motors/servos/gyros to the phone
-     */
-/**
     leftFrontDrive = hardwareMap.get(DcMotor.class, "lf");
     leftBackDrive = hardwareMap.get(DcMotor.class, "lb");
     rightFrontDrive = hardwareMap.get(DcMotor.class, "rf");
@@ -119,7 +111,6 @@ public class MecanumDrive extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
      */
-/**
     @Override
     public void init_loop() {
     }
@@ -127,7 +118,6 @@ public class MecanumDrive extends OpMode
     /*
      * Code to run ONCE when the driver hits PLAY
      */
-/**
     @Override
     public void start() {
         runtime.reset();
@@ -136,15 +126,10 @@ public class MecanumDrive extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
-/**
     @Override
     public void loop() {
         // robot.init(hardwareMap);
         // Setup a variable for each drive wheel to save power level for telemetry
-        /**
-         * this is how the joysticks drive the wheels
-          */
-/**
         double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
         double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4; //this could make it slow
         double rightX = gamepad1.right_stick_x;
@@ -157,10 +142,6 @@ public class MecanumDrive extends OpMode
         leftBackDrive.setPower(v3 / 2);
         rightBackDrive.setPower(v4 / 2);
 
-        /**
-         * It tells what the keys on the gamepad are meant to do
-         */
-/**
         if (gamepad1.b) {
             spinner.setPower(.5);
         } else {
@@ -207,6 +188,10 @@ public class MecanumDrive extends OpMode
 
 
 
+
+
+
+        
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", v1);
@@ -216,13 +201,9 @@ public class MecanumDrive extends OpMode
     /*
      * Code to run ONCE after the driver hits STOP
      */
-/**
     @Override
 
-    /**
-     * this stops all the motors
-     */
-/**
+
     public void stop() {
         leftFrontDrive.setPower(0);
         rightFrontDrive.setPower(0);
@@ -288,4 +269,4 @@ public class MecanumDrive extends OpMode
         //  sleep(250);   // optional pause after each move
     }
 } */
-
+}
