@@ -90,7 +90,6 @@ public class tankDrive extends OpMode
     servo = hardwareMap.get(Servo.class, "s1");
     Mservo = hardwareMap.get(Servo.class, "ms1");
 
-    leftDrive.setDirection(DcMotor.Direction.REVERSE);
     gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
     gyro.calibrate();
 
@@ -137,7 +136,7 @@ public class tankDrive extends OpMode
         servo.setPosition(0);
 
         while (gamepad1.left_bumper) {
-            msPosition += 0.01
+          //  msPosition += 0.01
         }
 
 

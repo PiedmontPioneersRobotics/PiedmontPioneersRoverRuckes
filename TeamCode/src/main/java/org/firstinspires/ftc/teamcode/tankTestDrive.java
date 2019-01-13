@@ -49,7 +49,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
-//useless comment
 
 @TeleOp(name="Tank test drive", group="Iterative Opmode")
 //@Disabled
@@ -59,7 +58,6 @@ public class tankTestDrive extends OpMode {
      */
 
     static final double COUNTS_PER_MOTOR_REV = 1440;    // eg: TETRIX Motor Encoder
-    //useless comment
     static final double DRIVE_GEAR_REDUCTION = 2.0;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -111,9 +109,7 @@ public class tankTestDrive extends OpMode {
         double power;
         //int position = motor.getCurrentPosition();
         telemetry.addData("Encoder Position", "ghj");
-        power = gamepad1.left_stick_y;
-        leftDrive.setPower(power);
-        power = gamepad1.right_stick_y;
-        rightDrive.setPower(power);
+        leftDrive.setPower(gamepad1.left_stick_y);
+        rightDrive.setPower(gamepad1.right_stick_y);
     }
 }
