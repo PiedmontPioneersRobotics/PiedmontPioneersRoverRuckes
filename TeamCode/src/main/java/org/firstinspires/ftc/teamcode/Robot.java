@@ -26,7 +26,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
@@ -44,22 +43,24 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
-
 public class Robot {
     /* Public OpMode members. */
 
     public DcMotor leftDrive;
     public DcMotor rightDrive;
+    public Servo servo;
+    public Servo Mservo;
+    ModernRoboticsI2cGyro gyro    = null;
+
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
-
     final double diameter = 4 * 2.54;
     final double pi = Math.PI;
-
+    final double ticksPerInch = 112;
     public void driveForward(double speed, double distance) {
-        double encoderDistance = (distance / (diameter * pi)) * 112;
+        double encoderDistance = (distance / (diameter * pi)) * ticksPerInch;
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -71,14 +72,63 @@ public class Robot {
             leftDrive.setPower(speed);
             rightDrive.setPower(speed);
         }
-        leftDrive.setPower(-1);
-        rightDrive.setPower(-1);
-        for (int i = 0; i < 100000; i++) {
-        }
-        leftDrive.setPower(0);
-        rightDrive.setPower(0);
-
     }
+
+    // stuff for turning with gyro
+    public double getError(double targetAngle) {
+
+        double robotError;
+        robotError = targetAngle - gyro.getIntegratedZValue();
+        while (robotError > 180) robotError -= 360;
+        while (robotError <= -180) robotError += 360;
+        return robotError;
+    }
+    static final double HEADING_THRESHOLD = 1;
+    boolean onHeading(double speed, double angle, double PCoeff) {
+        double error;
+        double steer;
+        boolean onTarget = false;
+        double leftSpeed;
+        double rightSpeed;
+
+        // determine turn power based on +/- error
+        error = getError(angle);
+
+        if (Math.abs(error) <= HEADING_THRESHOLD) {
+            steer = 0.0;
+            leftSpeed = 0.0;
+            rightSpeed = 0.0;
+            onTarget = true;
+        } else {
+            steer = getSteer(error, PCoeff);
+            rightSpeed = speed * steer;
+            leftSpeed = -rightSpeed;
+            // Send desired speeds to motors.
+            leftDrive.setPower(leftSpeed);
+            rightDrive.setPower(rightSpeed);
+
+        }
+        return onTarget;
+    }
+    public double getSteer(double error, double PCoeff) {
+        return Range.clip(error * PCoeff, -1, 1);
+    }
+    static final double P_TURN_COEFF = 0.1;
+    // useless comment
+    // turn with gyro
+    public void gyroTurn(double speed, double angle) {
+        while (!onHeading(speed, angle, P_TURN_COEFF)) {}
+    }
+    //turning bot servos
+    public double MservoMaxDegrees = 135;
+    public void moveMegaServo (double angle) {
+        Mservo.setPosition((1/MservoMaxDegrees)*angle);
+    }
+    public double servoMaxDegrees = 180;
+    public void moveServo (double angle) {
+        servo.setPosition((1/servoMaxDegrees)*angle);
+    }
+
 
 
 }

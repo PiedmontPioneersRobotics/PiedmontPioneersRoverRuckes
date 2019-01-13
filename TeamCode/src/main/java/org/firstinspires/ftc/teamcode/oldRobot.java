@@ -222,11 +222,7 @@ public class oldRobot {
      * turns using gyro
      */
     public void gyroTurn(double speed, double angle) {
-
-        // keep looping while we are still active, and not on heading.
-        while (!onHeading(speed, angle, P_TURN_COEFF)) {
-            // Update telemetry & Allow time for other processes to run.
-        }
+        while (!onHeading(speed, angle, P_TURN_COEFF)) {}
     }
 
     /**
