@@ -45,7 +45,7 @@ import java.util.List;
 
 public class Robot {
     /* Public OpMode members. */
-
+    HardwareMap hwMap = null;
     public DcMotor leftDrive;
     public DcMotor rightDrive;
     public Servo servo;
@@ -123,11 +123,46 @@ public class Robot {
     public void moveMegaServo (double angle) {
         Mservo.setPosition((1/MservoMaxDegrees)*angle);
     }
-    public double servoMaxDegrees = 180;
+    public double servoMaxDegrees = 90;
     public void moveServo (double angle) {
         servo.setPosition((1/servoMaxDegrees)*angle);
     }
+    public void init(HardwareMap ahwMap) {
+        // Save reference to Hardware map
+        hwMap = ahwMap;
 
+        leftDrive = ahwMap.get(DcMotor.class, "ld");
+        rightDrive = ahwMap.get(DcMotor.class, "rd");
+        /**
+         lifter1 = ahwMap.get(DcMotor.class, "lifter1");
+         lifter2 = ahwMap.get(DcMotor.class, "lifter2");
+         spinner = ahwMap.get(DcMotor.class, "spinner");
+         extender = ahwMap.get(DcMotor.class, "extender");
+         s1 = ahwMap.get(Servo.class, "s1");
+         s2 = ahwMap.get(Servo.class, "s2");
+         ms1 = ahwMap.get(Servo.class, "ms1");
+         ms2 = ahwMap.get(Servo.class, "ms2");
+         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("gyro");
+         gyro.calibrate();
+         */
 
+        // make sure the gyro is calibrated before continuing
+        //while
+        /**
+         (gyro.isCalibrating())  {}
+         */
 
+        // This tells it to run using encoder for the drive motors
+        rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        // Wait for the game to start (Display Gyro value), and reset gyro before we move..
+
+        //gyro.resetZAxisIntegrator();
+
+        // Most robots need the motor on one side to be reversed to drive forward
+        // Reverse the motor that runs backwards when connected directly to the battery
+        leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+    }
+    public void goToCrater () {}
 }

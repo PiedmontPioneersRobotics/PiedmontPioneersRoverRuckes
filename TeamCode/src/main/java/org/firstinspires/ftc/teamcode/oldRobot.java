@@ -141,7 +141,7 @@ public class oldRobot {
         leftDrive = ahwMap.get(DcMotor.class, "ld");
         rightDrive = ahwMap.get(DcMotor.class, "rd");
         /**
-         lifter1 = ahwMap.get(DcMotor.class, "lifter1");
+         lifter1 = ahwMap .get(DcMotor.class, "lifter1");
          lifter2 = ahwMap.get(DcMotor.class, "lifter2");
          spinner = ahwMap.get(DcMotor.class, "spinner");
          extender = ahwMap.get(DcMotor.class, "extender");
