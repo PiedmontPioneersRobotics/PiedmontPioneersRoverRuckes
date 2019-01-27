@@ -29,11 +29,9 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -50,9 +48,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@TeleOp(name="Tank test drive", group="Iterative Opmode")
+@TeleOp(name="MotorTest", group="Iterative Opmode")
 //@Disabled
-public class tankTestDrive extends OpMode {
+public class motorTest extends OpMode {
     /**
      * this starts all of the motors and servos and gyro
      */
@@ -64,10 +62,9 @@ public class tankTestDrive extends OpMode {
             (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double DRIVE_SPEED = 0.6;
     static final double TURN_SPEED = 0.5;
-    public DcMotor leftDrive;
-    public DcMotor rightDrive;
+    public DcMotor motorTest;
     // Declare OpMode members.
-    Robot robot = new Robot();
+    Robot robot = new Robot(hardwareMap);
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override
@@ -79,10 +76,8 @@ public class tankTestDrive extends OpMode {
         /**
          * this defines all of the motors/servos/gyros to the phone
          */
-        leftDrive = hardwareMap.get(DcMotor.class, "ld");
-        rightDrive = hardwareMap.get(DcMotor.class, "rd");
+        motorTest = hardwareMap.get(DcMotor.class, "motor0");
 
-        leftDrive.setDirection(DcMotor.Direction.REVERSE);
     }
 
     /*
@@ -103,13 +98,18 @@ public class tankTestDrive extends OpMode {
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
+
     @Override
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
         double power;
         //int position = motor.getCurrentPosition();
-        telemetry.addData("Encoder Position", "ghj");
-        leftDrive.setPower(gamepad1.left_stick_y);
-        rightDrive.setPower(gamepad1.right_stick_y);
+        telemetry.addData("Encoder Position", "Hello");
+        motorTest.setPower(gamepad1.left_stick_y);
+
+        while (gamepad1.y) {
+
+        }
+
     }
 }

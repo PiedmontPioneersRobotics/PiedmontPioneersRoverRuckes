@@ -52,47 +52,52 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Tank drive", group="Iterative Opmode")
 //@Disabled
-public class tankDrive extends OpMode
-{
+public class tankDrive extends OpMode {
     /**
      * this starts all of the motors and servos and gyro
      */
-
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_INCHES * 3.1415);
-    static final double     DRIVE_SPEED             = 0.6;
-    static final double     TURN_SPEED              = 0.5;
-    public DcMotor leftDrive;
-    public DcMotor rightDrive;
-    public Servo servo;
-    public Servo Mservo;
-
-    ModernRoboticsI2cGyro gyro    = null;
+//
+//    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+//    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+//    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+//    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
+//            (WHEEL_DIAMETER_INCHES * 3.1415);
+//    static final double     DRIVE_SPEED             = 0.6;
+//    static final double     TURN_SPEED              = 0.5;
+//    public DcMotor leftDrive;
+//    public DcMotor rightDrive;
+//    public DcMotor lifter;
+//    public Servo servo;
+//    public Servo Mservo;
+//    ModernRoboticsI2cGyro gyro    = null;
 
     // Declare OpMode members.
-    Robot robot = new Robot();
+    public Robot robot;
+    public DcMotor leftDrive;
+    public DcMotor rightDrive;
+    public DcMotor lifter;
+    public Servo servo;
+    public Servo Mservo;
+//    Robot robot = new Robot(hardwareMap);
     private ElapsedTime runtime = new ElapsedTime();
 
-@Override
+    @Override
     public void init() {
 
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
-    /**
-     * this defines all of the motors/servos/gyros to the phone
-     */
-    leftDrive = hardwareMap.get(DcMotor.class, "ld");
-    rightDrive = hardwareMap.get(DcMotor.class, "rd");
-    servo = hardwareMap.get(Servo.class, "s1");
-    Mservo = hardwareMap.get(Servo.class, "ms1");
-
-    gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
-    gyro.calibrate();
-
+        /**
+         * this defines all of the motors/servos/gyros to the phone
+         */
+//    robot.leftDrive = hardwareMap.get(DcMotor.class, "ld");
+//    rightDrive = hardwareMap.get(DcMotor.class, "rd");
+//    lifter = hardwareMap.get(DcMotor.class, "lifter");
+//    servo = hardwareMap.get(Servo.class, "s1");
+//    Mservo = hardwareMap.get(Servo.class, "ms1");
+//
+//    gyro = (ModernRoboticsI2cGyro)hardwareMap.gyroSensor.get("gyro");
+//    gyro.calibrate();
     }
 
     /*
@@ -114,110 +119,50 @@ public class tankDrive extends OpMode
     /*
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
-  //  @Override
+    //  @Override
     double msPosition = 0;
     double sPosition = 0;
 
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
-        double power;
         //int position = motor.getCurrentPosition();
         telemetry.addData("Encoder Position", "ghj");
-        power = gamepad1.left_stick_y/2;
-        leftDrive.setPower(power);
-        power = gamepad1.right_stick_y/2;
-        rightDrive.setPower(power);
+        robot.leftDrive.setPower(gamepad1.left_stick_y / 2);
+        robot.rightDrive.setPower(gamepad1.right_stick_y / 2);
 
 
-        robot.init(hardwareMap);
+        Robot robot = new Robot(hardwareMap);
 
 
         while (gamepad1.b) {
-            servo.setPosition(sPosition);
+            robot.servo.setPosition(sPosition);
             if (sPosition <= 100) {
                 sPosition += 0.005;
             }
         }
-        servo.setPosition(0);
+        robot.servo.setPosition(0);
 
         while (gamepad1.left_bumper) {
             msPosition += 0.005;
-            Mservo.setPosition(msPosition);
+            robot.Mservo.setPosition(msPosition);
         }
 
         while (gamepad1.right_bumper) {
             msPosition += -0.005;
-            Mservo.setPosition(msPosition);
+            robot.Mservo.setPosition(msPosition);
         }
 
+        while (gamepad1.y) {
+            robot.lifter.setPower(0.5);
+        }
 
-
-        // robot.init(hardwareMap);
-        // Setup a variable for each drive wheel to save power level for telemetry
-        /**
-         * this is how the joysticks drive the wheels
-          */
-        /**
-        double r = Math.hypot(gamepad1.left_stick_x, -gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4; //this could make it slow
-        double rightX = gamepad1.right_stick_x;
-        */
-
-
-
-        /**
-         * It tells what the keys on the gamepad are meant to do
-         */
-        /**
-        if (gamepad1.b) {
-            spinner.setPower(.5);
-        } else {
-            spinner.setPower(0);
+        while (gamepad1.b) {
+            robot.lifter.setPower(-0.5);
         }
-        if (gamepad1.dpad_up) {
-            extender.setPower(1);
-        } else {
-            extender.setPower(0);
-        }
-        if (gamepad1.dpad_down) {
-            extender.setPower(-1);
-        } else {
-            extender.setPower(0);
-        }
-        if (gamepad1.y) {
-            lifter1.setPower(1);
-            lifter2.setPower(1);
-        } else {
-            lifter1.setPower(0);
-            lifter2.setPower(0);
-        }
-        if (gamepad1.a) {
-            lifter1.setPower(-1);
-            lifter2.setPower(-1);
-        } else {
-            lifter1.setPower(0);
-            lifter2.setPower(0);
-        }
-        if (gamepad1.left_trigger > 0) {
-            ms1.setPosition(gamepad1.left_trigger);
-            ms2.setPosition(gamepad1.left_trigger);
-        } else {
-            ms1.setPosition(0);
-            ms2.setPosition(0);
-        }
-        if (gamepad1.right_trigger > 0) {
-            s1.setPosition(gamepad1.right_trigger);
-            s2.setPosition(gamepad1.right_trigger);
-        } else {
-            s1.setPosition(0);
-            s2.setPosition(0);
-        }
-        */
-
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", leftDrive);
+        telemetry.addData("Motors", robot.leftDrive);
 
     }
 
@@ -231,66 +176,7 @@ public class tankDrive extends OpMode
      */
 
     public void stop() {
-        leftDrive.setPower(0);
-        rightDrive.setPower(0);
-    }
-
- /*
-
-        ADD LEFT DRIVE AND RIGHT DRIVE.
-
-    public void encoderDrive(double speed,
-
-                              double leftInches, double rightInches,
-                              double timeoutS) {
-    int newLeftTarget;
-    int newRightTarget;
-
-    // Ensure that the opmode is still active
-    if (opModeIsActive()) {
-
-        // Determine new target position, and pass to motor controller
-        newLeftTarget = robot.leftDrive.getCurrentPosition() + (int)(leftInches * COUNTS_PER_INCH);
-        newRightTarget = robot.rightDrive.getCurrentPosition() + (int)(rightInches * COUNTS_PER_INCH);
-        robot.leftDrive.setTargetPosition(newLeftTarget);
-        robot.rightDrive.setTargetPosition(newRightTarget);
-
-        // Turn On RUN_TO_POSITION
-        robot.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // reset the timeout time and start motion.
-        runtime.reset();
-        robot.leftDrive.setPower(Math.abs(speed));
-        robot.rightDrive.setPower(Math.abs(speed));
-
-        // keep looping while we are still active, and there is time left, and both motors are running.
-        // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (opModeIsActive() &&
-                (runtime.seconds() < timeoutS) &&
-                (robot.leftDrive.isBusy() && robot.rightDrive.isBusy())) {
-
-            // Display it for the driver.
-            telemetry.addData("Path1",  "Running to %7d :%7d", newLeftTarget,  newRightTarget);
-            telemetry.addData("Path2",  "Running at %7d :%7d",
-                    robot.leftDrive.getCurrentPosition(),
-                    robot.rightDrive.getCurrentPosition());
-            telemetry.update();
-        }
-
-        // Stop all motion;
         robot.leftDrive.setPower(0);
         robot.rightDrive.setPower(0);
-
-        // Turn off RUN_TO_POSITION
-        robot.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        //  sleep(250);   // optional pause after each move
     }
-} */
 }

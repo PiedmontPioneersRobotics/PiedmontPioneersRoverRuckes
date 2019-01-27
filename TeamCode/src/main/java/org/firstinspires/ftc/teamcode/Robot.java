@@ -45,22 +45,26 @@ import java.util.List;
 
 public class Robot {
     /* Public OpMode members. */
-    HardwareMap hwMap = null;
+    HardwareMap hwMap;
     public DcMotor leftDrive;
     public DcMotor rightDrive;
+    public DcMotor lifter;
     public Servo servo;
     public Servo Mservo;
-    ModernRoboticsI2cGyro gyro    = null;
+    ModernRoboticsI2cGyro gyro;
 
+    public void init () {
+
+    }
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
-    final double diameter = 4 * 2.54;
+    final double diameter = 10.29;
     final double pi = Math.PI;
-    final double ticksPerInch = 112;
+    final double ticksPerRotation = 280;
     public void driveForward(double speed, double distance) {
-        double encoderDistance = (distance / (diameter * pi)) * ticksPerInch;
+        double encoderDistance = (distance / (diameter * pi)) * ticksPerRotation;
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -127,12 +131,12 @@ public class Robot {
     public void moveServo (double angle) {
         servo.setPosition((1/servoMaxDegrees)*angle);
     }
-    public void init(HardwareMap ahwMap) {
+    public Robot(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
-        leftDrive = ahwMap.get(DcMotor.class, "ld");
-        rightDrive = ahwMap.get(DcMotor.class, "rd");
+        gyro = (ModernRoboticsI2cGyro)ahwMap.gyroSensor.get("gyro");
+        gyro.calibrate();
         /**
          lifter1 = ahwMap.get(DcMotor.class, "lifter1");
          lifter2 = ahwMap.get(DcMotor.class, "lifter2");
@@ -164,5 +168,4 @@ public class Robot {
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
     }
-    public void goToCrater () {}
 }
