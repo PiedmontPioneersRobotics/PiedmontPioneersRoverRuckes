@@ -21,7 +21,7 @@ public class craterAutonomous extends LinearOpMode {
     public void runOpMode() {
         while (opModeIsActive()) {
             //Lowers down
-            robot.lifter.setPower(-0.2);
+            robot.lifter.setPower(0.2);
             sleep(750);
             robot.lifter.setPower(0);
 
@@ -32,7 +32,7 @@ public class craterAutonomous extends LinearOpMode {
             robot.driveForward(0.1,135);
 
             //lowers lifter
-            robot.lifter.setPower(0.2);
+            robot.lifter.setPower(-0.2);
             sleep(750);
             robot.lifter.setPower(0);
         }

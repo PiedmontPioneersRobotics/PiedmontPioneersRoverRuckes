@@ -21,7 +21,7 @@ public class depotAutonomous extends LinearOpMode {
     public void runOpMode() {
         while (opModeIsActive()) {
             //Lowers down
-            robot.lifter.setPower(-0.2);
+            robot.lifter.setPower(0.2);
             sleep(750);
             robot.lifter.setPower(0);
 
@@ -38,7 +38,7 @@ public class depotAutonomous extends LinearOpMode {
             robot.driveForward(0.1, 250);
 
             //lowers lifter
-            robot.lifter.setPower(0.2);
+            robot.lifter.setPower(-0.2);
             sleep(750);
             robot.lifter.setPower(0);
         }
