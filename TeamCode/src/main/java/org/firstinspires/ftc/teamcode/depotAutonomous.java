@@ -14,8 +14,8 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 import static java.lang.Thread.sleep;
 
-@Autonomous(name="crafterAutonomous")
-public class craterAutonomous extends LinearOpMode {
+@Autonomous(name="depotAutonomous")
+public class depotAutonomous extends LinearOpMode {
     Robot robot = new Robot(hardwareMap);
     @Override
     public void runOpMode() {
@@ -30,6 +30,12 @@ public class craterAutonomous extends LinearOpMode {
 
             //Drives forward
             robot.driveForward(0.1,135);
+
+            //turns toward crater
+            robot.gyroTurn(0.1, 135);
+
+            //drives into crater
+            robot.driveForward(0.1, 250);
 
             //lowers lifter
             robot.lifter.setPower(0.2);
