@@ -40,12 +40,16 @@ public class tankDrive extends LinearOpMode {
                     robot.Mservo.setPosition(msPosition);
                 }
 
-                while (gamepad1.y) {
-                    robot.lifter.setPower(0.5);
+                if (gamepad1.y) {
+                    robot.lifter.setPower(0.2);
+                    sleep(750);
+                    robot.lifter.setPower(0);
                 }
 
-                while (gamepad1.b) {
-                    robot.lifter.setPower(-0.5);
+                if (gamepad1.b) {
+                    robot.lifter.setPower(-0.2);
+                    sleep(750);
+                    robot.lifter.setPower(0);
                 }
             }
         }
