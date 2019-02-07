@@ -64,13 +64,13 @@ public class motorTest extends OpMode {
     static final double TURN_SPEED = 0.5;
     public DcMotor motorTest;
     // Declare OpMode members.
-    Robot robot = new Robot(hardwareMap);
+    Robot robot = new Robot();
     private ElapsedTime runtime = new ElapsedTime();
 
     @Override
     public void init() {
 
-
+        robot.init(hardwareMap);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         /**

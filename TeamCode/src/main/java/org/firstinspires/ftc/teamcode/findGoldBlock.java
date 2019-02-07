@@ -119,7 +119,6 @@ public class findGoldBlock extends LinearOpMode {
                 }
             }
         }
-
         if (tfod != null) {
             tfod.shutdown();
         }

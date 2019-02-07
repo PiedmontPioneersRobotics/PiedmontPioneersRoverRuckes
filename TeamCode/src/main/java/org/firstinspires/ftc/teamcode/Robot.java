@@ -29,6 +29,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cGyro;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -49,33 +51,43 @@ public class Robot {
     public DcMotor leftDrive;
     public DcMotor rightDrive;
     public DcMotor lifter;
+    public DcMotor arm;
     public Servo servo;
-    public Servo Mservo;
+
+
     ModernRoboticsI2cGyro gyro;
-
-    public void init () {
-
-    }
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
+    private static final String VUFORIA_KEY = "AfZ82G//////AAABmTCz0kBQDEwzrKIhsIwJFIVm20yDWkFHq2aAgA/k95YeAe2INqqkc9ZLSIPRIu3PF1ojmeVgb4VUI7J6Qays7ISspBJYdklKOdghZj6ucwy/ii7FqhaQAuqxXXXYJQ+/Ixx5HVbIDkhjUWZo76WGfiG1UGDogXGG+GDx68nRog6Zd09g5tYLqITCAmUSQf46n6KRgpJOBnf/a8nERAlwqeP+3Mp+nUL8QIy2aTIxmU7HSk15ocB0o40OQx4cAmlJvPfhF+kV+tckkM0EMcBuQa4MUPbPLA77LgZ0pzPaaH9fYNAQJCuwvcLtRD0Jr1Ze/cSXi9ITaZGanGdJoeTZ4hCeVA2dV4lJaui9hd/PtWid\n";
+    private VuforiaLocalizer vuforia;
+    private TFObjectDetector tfod;
     final double diameter = 10.29;
     final double pi = Math.PI;
     final double ticksPerRotation = 280;
+    public Robot() {}
     public void driveForward(double speed, double distance) {
         double encoderDistance = (distance / (diameter * pi)) * ticksPerRotation;
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lifter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        lifter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         while (leftDrive.getCurrentPosition() < encoderDistance &&
                 rightDrive.getCurrentPosition() < encoderDistance) {
-            leftDrive.setPower(speed);
-            rightDrive.setPower(speed);
+            leftDrive.setPower(-speed);
+            rightDrive.setPower(-speed);
         }
+
+        leftDrive.setPower(0);
+        rightDrive.setPower(0);
+
     }
 
     // stuff for turning with gyro
@@ -122,50 +134,31 @@ public class Robot {
     public void gyroTurn(double speed, double angle) {
         while (!onHeading(speed, angle, P_TURN_COEFF)) {}
     }
-    //turning the servos
-    public double MservoMaxDegrees = 135;
-    public void moveMegaServo (double angle) {
-        Mservo.setPosition((1/MservoMaxDegrees)*angle);
-    }
+
+
+
     public double servoMaxDegrees = 90;
     public void moveServo (double angle) {
         servo.setPosition((1/servoMaxDegrees)*angle);
     }
-    public Robot(HardwareMap ahwMap) {
+    public void init(HardwareMap ahwMap) {
         // Save reference to Hardware map
         hwMap = ahwMap;
 
+
         gyro = (ModernRoboticsI2cGyro)ahwMap.gyroSensor.get("gyro");
         gyro.calibrate();
-        /**
-         lifter1 = ahwMap.get(DcMotor.class, "lifter1");
-         lifter2 = ahwMap.get(DcMotor.class, "lifter2");
-         spinner = ahwMap.get(DcMotor.class, "spinner");
-         extender = ahwMap.get(DcMotor.class, "extender");
-         s1 = ahwMap.get(Servo.class, "s1");
-         s2 = ahwMap.get(Servo.class, "s2");
-         ms1 = ahwMap.get(Servo.class, "ms1");
-         ms2 = ahwMap.get(Servo.class, "ms2");
-         gyro = (ModernRoboticsI2cGyro)hwMap.gyroSensor.get("gyro");
-         gyro.calibrate();
-         */
+        leftDrive = (DcMotor)ahwMap.get("ld");
+        rightDrive = (DcMotor)ahwMap.get("rd");
+        lifter = (DcMotor)ahwMap.get("lifter");
+        arm = (DcMotor)ahwMap.get("arm");
 
-        // make sure the gyro is calibrated before continuing
-        //while
-        /**
-         (gyro.isCalibrating())  {}
-         */
-
-        // This tells it to run using encoder for the drive motors
         rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        // Wait for the game to start (Display Gyro value), and reset gyro before we move..
-
-        //gyro.resetZAxisIntegrator();
-
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
     }
+
+    public void findGoldBlock () {
+
+    }
+
 }

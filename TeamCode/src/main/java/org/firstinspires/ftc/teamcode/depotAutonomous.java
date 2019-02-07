@@ -16,17 +16,20 @@ import static java.lang.Thread.sleep;
 
 @Autonomous(name="depotAutonomous")
 public class depotAutonomous extends LinearOpMode {
-    Robot robot = new Robot(hardwareMap);
+    Robot robot = new Robot();
     @Override
     public void runOpMode() {
-        while (opModeIsActive()) {
+        robot.init(hardwareMap);
+
             //Lowers down
             robot.lifter.setPower(0.2);
-            sleep(750);
+            sleep(1500);
             robot.lifter.setPower(0);
 
             //lifts the superduperscooper up some
-            robot.Mservo.setPosition(10);
+            robot.arm.setPower(0.2);
+            sleep(400);
+            robot.arm.setPower(0);
 
             //Drives forward
             robot.driveForward(0.1,135);
@@ -36,11 +39,10 @@ public class depotAutonomous extends LinearOpMode {
 
             //drives into crater
             robot.driveForward(0.1, 250);
-
             //lowers lifter
             robot.lifter.setPower(-0.2);
-            sleep(750);
+            sleep(1400);
             robot.lifter.setPower(0);
-        }
+
     }
 }

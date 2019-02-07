@@ -14,27 +14,35 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 import static java.lang.Thread.sleep;
 
-@Autonomous(name="crafterAutonomous")
+@Autonomous(name="craterAutonomous")
+
 public class craterAutonomous extends LinearOpMode {
-    Robot robot = new Robot(hardwareMap);
+
+
+    Robot robot = new Robot();
     @Override
     public void runOpMode() {
-        while (opModeIsActive()) {
+        robot.init(hardwareMap);
+        telemetry.update();
+
+            waitForStart();
+
             //Lowers down
             robot.lifter.setPower(0.2);
-            sleep(750);
+            sleep(1500);
             robot.lifter.setPower(0);
 
-            //lifts the superduperscooper up some
-            robot.Mservo.setPosition(10);
+            //lifts the superduperscooper up a bit
+            robot.arm.setPower(0.3);
+            sleep(1000);
+            robot.arm.setPower(0);
+
 
             //Drives forward
-            robot.driveForward(0.1,135);
-
+            robot.driveForward(0.3,135);
             //lowers lifter
             robot.lifter.setPower(-0.2);
-            sleep(750);
+            sleep(1400);
             robot.lifter.setPower(0);
-        }
     }
 }
